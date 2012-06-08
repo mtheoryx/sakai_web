@@ -14,4 +14,11 @@ Gem::Specification.new do |gem|
   gem.name          = "sakai_web"
   gem.require_paths = ["lib"]
   gem.version       = SakaiWeb::VERSION
+
+	gem.add_development_dependency 'rake'
+	gem.add_development_dependency 'rspec'
+	gem.add_development_dependency 'fakeweb'
+	gem.add_development_dependency 'vcr'
+	
+	# gem.add_runtime_dependency 'savon'
 end

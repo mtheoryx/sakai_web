@@ -1,6 +1,7 @@
 # SakaiWeb
 
-TODO: Write a gem description
+This gem is for more easily using Ruby scripts to interact
+with [Sakai's Web Services](https://confluence.sakaiproject.org/display/WEBSVCS/Home).
 
 ## Installation
 
@@ -18,7 +19,21 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+	require 'sakai_web'
+	
+	# Interact with Sakai Web services in a REST-ish way
+	
+	#Get
+	SakaiWeb.get(service, data, auth)
+	
+	#Put
+	SakaiWeb.put(service, data, auth)
+	
+	#Post
+	SakaiWeb.post(service, data, auth)
+	
+	#Delete
+	SakaiWeb.delete(service, data, auth)
 
 ## Contributing
 
