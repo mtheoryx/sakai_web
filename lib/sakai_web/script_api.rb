@@ -50,12 +50,14 @@ module SakaiWeb
           end
 
           tools = response.to_hash[:get_pages_and_tools_for_site_response][:get_pages_and_tools_for_site_return]
-          # binding.pry
           tool_list = Nokogiri::XML.parse(tools)
-          # binding.pry
-          # Locate the Home page
 
-          # List all the tools on the home page
+          # @TODO: Return array or hash of tool names and IDs
+          binding.pry
+
+        end
+
+        def add_property_to_site( site_id, property )
 
         end
   end

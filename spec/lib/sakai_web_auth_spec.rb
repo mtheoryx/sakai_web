@@ -63,7 +63,6 @@ describe SakaiWeb::Client do
 		before(:all) do
 			@client = SakaiWeb::Client.new
 		end
-		# @TODO Utility for checking if a user is currently logged in
 		it "should fail when there is no session set" do
 			@client.should_not be_loggedin
 		end

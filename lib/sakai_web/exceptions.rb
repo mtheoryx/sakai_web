@@ -4,4 +4,7 @@ module SakaiWeb
 
   class NotFound < StandardError
   end
+
+  class AlreadyExists < StandardError
+  end
 end
