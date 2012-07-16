@@ -15,10 +15,16 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = SakaiWeb::VERSION
 
-	gem.add_development_dependency 'rake'
-	gem.add_development_dependency 'rspec'
-	gem.add_development_dependency 'fakeweb'
-	gem.add_development_dependency 'vcr'
-	
-	# gem.add_runtime_dependency 'savon'
+  gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'fuubar'
+  gem.add_development_dependency 'fakeweb'
+  gem.add_development_dependency 'vcr'
+  gem.add_development_dependency 'autotest'
+  gem.add_development_dependency 'autotest-fsevent'
+  gem.add_development_dependency 'pry'
+
+
+  gem.add_runtime_dependency 'savon'
+  gem.add_runtime_dependency 'soap4r'
 end

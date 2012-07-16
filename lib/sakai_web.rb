@@ -1,8 +1,26 @@
-require "sakai_web/version"
-require "sakai_web/sakai_web_api"
+require 'yaml'
+
+%w{version auth utilities exceptions script_api}.each do |local|
+  require "sakai_web/#{local}"
+end
 
 module SakaiWeb
-	def self.get( service, data, auth )
-		SakaiWebApi.new.get(service, data, auth)
-	end
+  class Client
+
+    [Auth, Utilities, ScriptApi].each do |inc|
+      include inc
+    end
+
+    attr_accessor(:user, :pass, :auth_url, :session, :cookie, :config_file)
+
+    def initialize( opts = {} )
+      @user = nil
+      @pass = nil
+      @auth_url = nil
+      @session = nil
+      @cookie = nil
+      @config_file = opts[:config_file] ||= Dir.home + "/.sakai_web_config.yaml"
+    end
+
+  end
 end
