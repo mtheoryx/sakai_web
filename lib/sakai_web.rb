@@ -1,6 +1,6 @@
 require 'yaml'
 
-%w{version auth utilities exceptions script_api}.each do |local|
+%w{version auth utilities script_api}.each do |local|
   require "sakai_web/#{local}"
 end
 
@@ -19,7 +19,7 @@ module SakaiWeb
       @auth_url = nil
       @session = nil
       @cookie = nil
-      @config_file = opts[:config_file] ||= Dir.home + "/.sakai_web_config.yaml"
+      @config_file = opts[:config_file] ||= Dir.home + "/.sakai_web_config.yml"
     end
 
   end

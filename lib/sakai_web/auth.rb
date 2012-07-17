@@ -13,19 +13,19 @@ module SakaiWeb
 			@session = nil
 			@cookie = nil
 
-			config = YAML.load_file(@config_file);
+			config = YAML.load( File.open(@config_file) );
 
-			@auth_url = auth_url ||= config["auth_wsdl"]
+			@auth_url = auth_url ||= config[:auth_wsdl]
 			if @auth_url.nil?
 		      	raise(ArgumentError, "No login wsdl URL supplied.")
 		      end
-
-		      @user = auth_opts[:user] ||= config["admin"]
+		      # binding.pry
+		      @user = auth_opts[:user] ||= config[:admin]
 		      if @user.nil?
 		      	raise(ArgumentError, "No username supplied.")
 		      end
 
-		      @pass = auth_opts[:pass] ||= config["pass"]
+		      @pass = auth_opts[:pass] ||= config[:pass]
 		      if @pass.nil?
 		      	raise(ArgumentError, "No password supplied.")
 		      end

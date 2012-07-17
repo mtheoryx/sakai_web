@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'yaml'
 
 describe SakaiWeb::Client do
-	config = YAML.load_file(Dir.home + "/.sakai_web_config.yaml");
+
 	describe "#new" do
 		it "should create a new SakaiWeb::Client instance" do
 			SakaiWeb::Client.new.should be_an_instance_of(SakaiWeb::Client)
@@ -18,16 +18,18 @@ describe SakaiWeb::Client do
 	describe "local configuration file" do
 		it "should have a default config file location" do
 			client = SakaiWeb::Client.new
-			client.config_file.should eql( Dir.home + "/.sakai_web_config.yaml" )
+			client.config_file.should eql( Dir.home + "/.sakai_web_config.yml" )
 		end
 		it "should accept a new config file location" do
-			client = SakaiWeb::Client.new( {:config_file => Dir.home + "Desktop/.sakai_web_config.yaml"} )
-			client.config_file.should eql( Dir.home + "Desktop/.sakai_web_config.yaml" )
+			client = SakaiWeb::Client.new( {:config_file => Dir.home + "Desktop/.sakai_web_config.yml"} )
+			client.config_file.should eql( Dir.home + "Desktop/.sakai_web_config.yml" )
 		end
 	end
 
 	describe "#login" do
 		before(:all) do
+			@config = YAML.load_file(Dir.home + "/.sakai_web_config.yml");
+			# binding.pry
 			@client = SakaiWeb::Client.new
 		end
 
@@ -35,13 +37,13 @@ describe SakaiWeb::Client do
 			expect{ @client.login }.to_not raise_error(ArgumentError, "No login wsdl URL supplied.")
 		end
 		it "should accept a login url override" do
-			expect{ @client.login(config["auth_wsdl"]) }.to_not raise_error(ArgumentError, "No login wsdl URL supplied.")
-			@client.auth_url.should eql(config["auth_wsdl"])
+			expect{ @client.login(@config[:auth_wsdl]) }.to_not raise_error(ArgumentError, "No login wsdl URL supplied.")
+			@client.auth_url.should eql(@config[:auth_wsdl])
 		end
 		it "should need a user and password" do
-			expect {@client.login(config["auth_wsdl"], {:user => config["admin"], :pass => config["pass"]})}.to_not raise_error(ArgumentError)
-			@client.user.should eq(config["admin"])
-			@client.pass.should eq(config["pass"])
+			expect { @client.login( @config[:auth_wsdl], {:user => @config[:admin], :pass => @config[:pass]} ) }.to_not raise_error(ArgumentError)
+			@client.user.should eq(@config[:admin])
+			# @client.pass.should eq(config[:pass])
 		end
 		it "should not have a session set before authentication" do
 			client = SakaiWeb::Client.new
