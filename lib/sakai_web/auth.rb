@@ -5,8 +5,8 @@ Savon.configure do |c|
   c.log = false
   c.pretty_print_xml = true
 end
-HTTPI.log = true
-HTTPI.log_level = :debug
+HTTPI.log = false
+
 
 module SakaiWeb
 	module Auth
@@ -55,12 +55,47 @@ module SakaiWeb
 		    		raise
 		    	end
 
-			@session = login_response.to_hash[:login_response][:login_return]
+		    	@session = login_response.to_hash[:login_response][:login_return]
+
+		    	unless @session.instance_of? Nori::StringWithAttributes
+		    		return false
+		    	end
 
 	    	end
 
 	    	def loggedin?
 	    		@session.nil? ? false : (return true)
+	    	end
+
+	    	def logout( session )
+
+	    		unless @session = session
+	    			raise StandardError, "Session #{session}, is not active."
+	    		end
+
+	    		client = Savon::Client.new do
+	    			wsdl.document = auth_url
+	    			wsdl.element_form_default = :unqualified
+	    		end
+
+	    		begin
+		    		logout_response = client.request  :logout do |soap|
+					soap.body = {:id => session.to_s}
+		    		end
+			rescue ArgumentError, "Wasabi needs a WSDL document"
+		    		raise StandardError, "Incorrect login url supplied."
+		    	rescue Errno::ECONNREFUSED => error
+		    		raise error.to_s
+		    	rescue Savon::SOAP::Fault => fault
+		    		raise StandardError, "Incorrect session for logout: #{fault.to_s}"
+			rescue Savon::Error => error
+		    		raise error.to_s
+		    	end
+
+		    	unless logout_response.soap_fault?
+				@session = nil
+			end
+
 	    	end
 	end
 end

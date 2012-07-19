@@ -6,7 +6,7 @@ Savon.configure do |c|
   c.log = false
   c.pretty_print_xml = true
 end
-HTTPI.log = true
+HTTPI.log = false
 
 module SakaiWeb
   module ScriptApi
