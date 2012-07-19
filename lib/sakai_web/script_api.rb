@@ -6,7 +6,7 @@ Savon.configure do |c|
   c.log = false
   c.pretty_print_xml = true
 end
-HTTPI.log = false
+HTTPI.log = true
 
 module SakaiWeb
   module ScriptApi
@@ -36,8 +36,6 @@ module SakaiWeb
             wsdl.document = service_wsdl
             wsdl.element_form_default = :unqualified
           end
-
-
 
           begin
             response = client.request  :get_pages_and_tools_for_site do |soap|
@@ -113,5 +111,19 @@ module SakaiWeb
             return false
           end
         end
+
+      def find_tool_in_site( site_id, tool_id )
+        haystack = list_tools_for_site( site_id )
+        needle = tool_id
+
+        #perform the search for the tool id
+        result = haystack.select {|h| h[:id] == needle}
+
+        (result.empty?) ? false : (return true)
+
+      end
+
+
+
   end
 end

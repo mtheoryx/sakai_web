@@ -29,7 +29,6 @@ describe SakaiWeb::Client do
 	describe "#login" do
 		before(:all) do
 			@config = YAML.load_file(Dir.home + "/.sakai_web_config.yml");
-			# binding.pry
 			@client = SakaiWeb::Client.new
 		end
 
@@ -53,13 +52,34 @@ describe SakaiWeb::Client do
 			@client.login
 			@client.session.should_not be_nil
 		end
-		it "should be able to clusterbust through a load balancer" do
-			pending "Need access to cluster to test this"
-			client = SakaiWeb::Client.new
-			expect { client.login( "https://oncourse.iu.edu/sakai-axis/SakaiLogin.jws?wsdl" ,
-					{:user => "", :pass => ""}) }.to_not raise_error
-			# @TODO: call a basic "get" method to make sure the cookies are being handled
-		end
+  #           it "should be able to clusterbust through a load balancer", :focus => true do
+  #             client = SakaiWeb::Client.new
+  #             expect { client.login( "https://stage.oncourse.iu.edu/sakai-axis/SakaiLogin.jws?wsdl" ,
+  #               {:user => "davpoind_admin", :pass => "oncourse is administrated"}) }.to_not raise_error
+  #             expect { client.list_tools_for_site( "SU12-IN-UITS-PRAC-45662", {:service_wsdl => "https://stage.oncourse.iu.edu/sakai-axis/SakaiScript.jws?wsdl"} ) }.to_not raise_error
+  #           end
+		# it "should be able to establish a session, then make repeated calls to the service"  do
+		# 	client = SakaiWeb::Client.new
+		# 	expect { client.login( "https://stage.oncourse.iu.edu/sakai-axis/SakaiLogin.jws?wsdl" ,
+		# 			{:user => "davpoind_admin", :pass => "oncourse is administrated"}) }.to_not raise_error
+		# 	expect {
+		# 			3.times do
+
+		# 				2.times do
+		# 					client.list_tools_for_site( "SU12-IN-UITS-PRAC-45662",
+		# 					{:service_wsdl => "https://stage.oncourse.iu.edu/sakai-axis/SakaiScript.jws?wsdl"} )
+		# 					sleep(2)
+		# 				end
+		# 				sleep(10)
+		# 				3.times do
+		# 					client.list_tools_for_site( "SU12-IN-UITS-PRAC-45662",
+		# 					{:service_wsdl => "https://stage.oncourse.iu.edu/sakai-axis/SakaiScript.jws?wsdl"} )
+		# 					sleep(3)
+		# 				end
+		# 				sleep(10)
+		# 			end
+		# 		}.to_not raise_error
+		# end
 	end
 	describe "#loggedin?" do
 		before(:all) do
@@ -72,5 +92,9 @@ describe SakaiWeb::Client do
 			@client.login
 			@client.should be_loggedin
 		end
+	end
+	describe "#logout", :focus => true do
+
+		it "should take a session and logout"
 	end
 end

@@ -5,7 +5,8 @@ Savon.configure do |c|
   c.log = false
   c.pretty_print_xml = true
 end
-HTTPI.log = false
+HTTPI.log = true
+HTTPI.log_level = :debug
 
 module SakaiWeb
 	module Auth
@@ -19,7 +20,7 @@ module SakaiWeb
 			if @auth_url.nil?
 		      	raise(ArgumentError, "No login wsdl URL supplied.")
 		      end
-		      # binding.pry
+
 		      @user = auth_opts[:user] ||= config[:admin]
 		      if @user.nil?
 		      	raise(ArgumentError, "No username supplied.")
@@ -29,10 +30,12 @@ module SakaiWeb
 		      if @pass.nil?
 		      	raise(ArgumentError, "No password supplied.")
 		      end
+
 			return get_new_session
 		end
 
 	    	def get_new_session
+
 	    		client = Savon::Client.new do
 	    			wsdl.document = auth_url
 	    			wsdl.element_form_default = :unqualified
@@ -54,8 +57,6 @@ module SakaiWeb
 
 			@session = login_response.to_hash[:login_response][:login_return]
 
-			# @TODO: Capture the cookie as well
-			# This is for cluster busting on the next request
 	    	end
 
 	    	def loggedin?

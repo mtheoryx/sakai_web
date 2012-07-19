@@ -26,5 +26,5 @@ Gem::Specification.new do |gem|
 
 
   gem.add_runtime_dependency 'savon'
-  gem.add_runtime_dependency 'soap4r'
+  # gem.add_runtime_dependency 'soap4r'
 end

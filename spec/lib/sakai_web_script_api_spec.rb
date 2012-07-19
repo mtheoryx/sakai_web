@@ -43,7 +43,7 @@ describe "#get_site_property" do
   end
 end
 
-describe "#add_property_to_site", :focus => true do
+describe "#add_property_to_site" do
   it "should require a site id" do
     expect{ @client.add_property_to_site }.to raise_error ArgumentError
   end
@@ -66,10 +66,18 @@ describe "#add_property_to_site", :focus => true do
 end
 
 describe "#find_tool_in_site" do
-  it "should require a site id"
-  it "should require a tool id"
-  it "should return false when the tool is not found"
-  it "should return true when the tool is found"
+  it "should require a site id" do
+    expect{ @client.find_tool_in_site }.to raise_error ArgumentError
+  end
+  it "should require a tool id" do
+    expect{ @client.find_tool_in_site("03eff8a7-cbae-4daa-9387-c06c05cf5e13") }.to raise_error ArgumentError
+  end
+  it "should return false when the tool is not found" do
+    @client.find_tool_in_site("03eff8a7-cbae-4daa-9387-c06c05cf5e13", "fake.tool.id").should be_false
+  end
+  it "should return true when the tool is found" do
+    @client.find_tool_in_site("03eff8a7-cbae-4daa-9387-c06c05cf5e13", "sakai.iframe.site").should be_true
+  end
 end
 
 describe "#add_tool_to_site" do
