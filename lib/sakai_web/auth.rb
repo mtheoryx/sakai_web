@@ -9,7 +9,18 @@ HTTPI.log = false
 
 
 module SakaiWeb
+    # Authentication related methods, such as loggin in, getting a session, logging out, etc
+    #
+    # @author (see SakaiWeb)
     module Auth
+
+        # Log into the Sakai Web Services
+        #
+        # If successful, sets the SakaiWeb::Client session attribute for further interractions.
+        #
+        # @param auth_url [String] The url to the SakaiLogin.jws WSDL
+        # @param auth_opts [Hash] Options to override defaults.
+        # @return []
         def login(auth_url = nil, auth_opts = {})
             @session, @cookie = nil
 

@@ -23,8 +23,9 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'autotest'
   gem.add_development_dependency 'autotest-fsevent'
   gem.add_development_dependency 'pry'
+  gem.add_development_dependency 'yard'
+  gem.add_development_dependency 'redcarpet'
 
 
   gem.add_runtime_dependency 'savon'
-  # gem.add_runtime_dependency 'soap4r'
 end
