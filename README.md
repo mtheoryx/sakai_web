@@ -5,7 +5,7 @@ with [Sakai's Web Services](https://confluence.sakaiproject.org/display/WEBSVCS/
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add this line to your application's Gemfile, if you want to incorporate it:
 
     gem 'sakai_web'
 
@@ -17,23 +17,27 @@ Or install it yourself as:
 
     $ gem install sakai_web
 
-## Usage
+## Usage in your own code:
 
 	require 'sakai_web'
-	
+
 	# Interact with Sakai Web services in a REST-ish way
-	
+
 	#Get
 	SakaiWeb.get(service, data, auth)
-	
+
 	#Put
 	SakaiWeb.put(service, data, auth)
-	
+
 	#Post
 	SakaiWeb.post(service, data, auth)
-	
+
 	#Delete
 	SakaiWeb.delete(service, data, auth)
+
+## Usage as a standalone CLI utility:
+
+	Feature (binary) Coming soon...
 
 ## Contributing
 

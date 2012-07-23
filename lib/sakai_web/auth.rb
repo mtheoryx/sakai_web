@@ -20,7 +20,7 @@ module SakaiWeb
         #
         # @param auth_url [String] The url to the SakaiLogin.jws WSDL
         # @param auth_opts [Hash] Options to override defaults.
-        # @return []
+        # @return [Boolean] returns true if a session was set, false if it was not.
         def login(auth_url = nil, auth_opts = {})
             @session, @cookie = nil
 
@@ -38,6 +38,9 @@ module SakaiWeb
             get_new_session
         end
 
+        # Method used to call the Sakai Web Services login WSDL and establish a new session
+        #
+        # @return (see #login)
         def get_new_session
             client = Savon::Client.new do
                 wsdl.document = auth_url
@@ -63,10 +66,18 @@ module SakaiWeb
             false unless @session.instance_of? Nori::StringWithAttributes
         end
 
+        # Utility method for determining status of a login session
+        #
+        # @return (see #login)
         def loggedin?
             @session.nil? ? false : (return true)
         end
 
+        # Calls the Sakai web services login wsdl to log out of a session
+        #
+        # Session will probably stick around, but will be marked inactive immediately.
+        #
+        # @param session [String] Session identifier from which to log out.
         def logout( session )
             unless @session = session
                 raise StandardError, "Session #{session}, is not active."
