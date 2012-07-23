@@ -20,6 +20,8 @@ module SakaiWeb
       @session = nil
       @cookie = nil
       @config_file = opts[:config_file] ||= Dir.home + "/.sakai_web_config.yml"
+      @config = YAML.load(File.open(@config_file))
+      @service_wsdl = @config[:service_wsdl]
     end
 
   end

@@ -84,17 +84,112 @@ describe SakaiWeb::ScriptApi do
         end
     end
 
+    describe "#find_page_in_site" do
+        before(:all) do
+            @test_site_id = "03eff8a7-cbae-4daa-9387-c06c05cf5e13"
+            @test_page_title = "Home"
+            @test_missing_page_title = "Bobby Brown"
+        end
+        it "should require a site_id" do
+            expect{ @client.find_page_in_site }.to raise_error ArgumentError
+        end
+        it "should require a page_id" do
+            expect{ @client.find_page_in_site( @test_site_id ) }.to raise_error ArgumentError
+        end
+        it "should return false if the page is not found" do
+            @client.find_page_in_site( @test_site_id, @test_missing_page_title ).should be_false
+        end
+        it "should return true if the page already exists" do
+            @client.find_page_in_site( @test_site_id, @test_page_title ).should be_true
+        end
+    end
+
+    describe "#remove_page_from_site" do
+        before(:all) do
+            @test_site_id = "03eff8a7-cbae-4daa-9387-c06c05cf5e13"
+            @test_page_title = "Media Gallery"
+            @test_dupe_page_title = "Home"
+        end
+        it "should require a site_id" do
+            expect{ @client.remove_page_from_site }.to raise_error ArgumentError
+        end
+        it "should require a page_title" do
+            expect{ @client.remove_page_from_site( @test_site_id ) }.to raise_error ArgumentError
+        end
+        it "should fail when the page doesn't exist" do
+            expect{ @client.remove_page_from_site( @test_site_id, "Not a real site." ) }.to raise_error
+        end
+        it "should remove a page that does exist" do
+            pending "Bug in this api method, was resolved in 2.9, so we can't use this yet. :("
+            # @client.add_page_to_site( @test_site_id, "Test Page" )
+            # expect{ @client.remove_page_from_site( @test_site_id, "Test Page" )}.to_not raise_error
+            # @client.find_page_in_site( @test_site_id, "Test Page" ).should be_false
+        end
+    end
+
+    describe "#add_page_to_site" do
+        before(:all) do
+            @test_site_id = "03eff8a7-cbae-4daa-9387-c06c05cf5e13"
+            @test_page_title = "Media Gallery"
+            @test_dupe_page_title = "Home"
+        end
+        it "should require a site_id" do
+            expect{ @client.add_page_to_site }.to raise_error ArgumentError
+        end
+        it "should require a page_title" do
+            expect{ @client.add_page_to_site( @test_site_id ) }.to raise_error ArgumentError
+        end
+        it "should still return trueif the page already exists" do
+            @client.add_page_to_site( @test_site_id, @test_dupe_page_title ).should be_true
+        end
+        it "should add a new page to the site" do
+            random_new_page = "#{@test_page_title} - #{rand(1000).to_s}"
+            @client.add_page_to_site( @test_site_id, random_new_page )
+            @client.find_page_in_site( @test_site_id, random_new_page ).should be_true
+        end
+    end
+
     describe "#add_tool_to_site", :focus => true do
-        it "should require a site id"
-        it "should require a page title"
-        it "should require a tool title"
-        it "should require a tool id"
-        it "should not already be a tool in the site"
-        it "should not add a tool that is already in the site"
-        it "should add a tool to the site"
-        it "should verify that a tool is added to the site"
-        it "should fail if the verification of adding a tool fails"
-        it "should pass if the verification of adding a tool to the site succeeds"
+        before(:all) do
+            @test_site_id = "03eff8a7-cbae-4daa-9387-c06c05cf5e13"
+            @test_page_title = "Media Gallery"
+            @test_tool_title = "Media Gallery"
+            @test_tool_id = "sakai.kaltura"
+            @test_layout_hints = "0,0"
+        end
+        it "should require a site id" do
+            expect{ @client.add_tool_to_site }.to raise_error ArgumentError
+        end
+        it "should require a page title" do
+            expect{ @client.add_tool_to_site( @test_site_id ) }.to raise_error ArgumentError
+        end
+        it "should require a tool title" do
+            expect{ @client.add_tool_to_site( @test_site_id,
+                                                                @test_page_title )
+                        }.to raise_error ArgumentError
+        end
+        it "should require a tool id" do
+            expect{ @client.add_tool_to_site( @test_site_id,
+                                                                @test_page_title,
+                                                                @tool_title )
+                        }.to raise_error ArgumentError
+        end
+        it "should not add a tool that is already in the site" do
+            expect{ @client.add_tool_to_site( @test_site_id,
+                                                                @test_page_title,
+                                                                @tool_title,
+                                                                "sakai.siteinfo" )
+                        }.to_not raise_error
+        end
+        it "should add a tool to the site"  do
+            @client.add_tool_to_site( @test_site_id,
+                                                                @test_page_title,
+                                                                @test_tool_title,
+                                                                 @test_tool_id,
+                                                                 "0,0")
+
+            @client.find_tool_in_site( @test_site_id, @test_tool_id ).should be_true
+        end
     end
 
     after(:all) do
