@@ -149,7 +149,7 @@ describe SakaiWeb::ScriptApi do
         end
     end
 
-    describe "#add_tool_to_site", :focus => true do
+    describe "#add_tool_to_site" do
         before(:all) do
             @test_site_id = "03eff8a7-cbae-4daa-9387-c06c05cf5e13"
             @test_page_title = "Media Gallery"

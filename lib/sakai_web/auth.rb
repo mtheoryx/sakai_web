@@ -44,32 +44,16 @@ module SakaiWeb
             get_new_session
         end
 
-        # Method used to call the Sakai Web Services login WSDL and establish a new session
-        #
-        # @raise [StandardError] If you don't provide a correct login WSDL url
-        # @raise [ECONNREFUSED] If the server is not responding, or doesn't exist.
-        # @raise [StandarError] If the credentials don't allow a login
-        # @raise [Savon::Error] Catchall for other errors from Savon soap request.
+        # Calls the Sakai Web Services login WSDL to establish get a new session identifier
         #
         # @return (see #login)
         def get_new_session
-            client = Savon::Client.new do
-                wsdl.document = auth_url
-                wsdl.element_form_default = :unqualified
-            end
+            client = prepare_request(auth_url)
 
-            begin
-                login_response = client.request  :login do |soap|
+            login_response = do_request_and_handle_errors do
+                client.request  :login do |soap|
                     soap.body = {:id => @user, :pw => @pass}
                 end
-            rescue ArgumentError, "Wasabi needs a WSDL document"
-                raise StandardError, "Incorrect login url supplied."
-            rescue Errno::ECONNREFUSED => error
-                raise error.to_s
-            rescue Savon::SOAP::Fault => fault
-                raise StandardError, "Invalid login credentials."
-            rescue Savon::Error => error
-                raise error.to_s
             end
 
             @session = login_response.to_hash[:login_response][:login_return]
@@ -86,16 +70,9 @@ module SakaiWeb
 
         # Calls the Sakai web services login wsdl to log out of a session
         #
-        # Session will probably stick around, but will be marked inactive immediately.
-        #
-        # Sets the session attibute to nil if successful
-        #
         # @param session [String] Session identifier from which to log out.
         #
-        # @raise [StandardError] Incorrect SakaiLogin WSDL url provided
-        # @raise [ECONNREFUSED] Server is not responding, or doesn't exist.
-        # @raise [StandardError] If you pass a session that isn't even valid in the first place.
-        # @raise [Savon::Error] Carchall for other errors from Savon soap request
+        # @raise [StandardError] Session parameter is not a valid session in the first place.
         #
         # @return [nil]
         def logout( session )
@@ -103,29 +80,17 @@ module SakaiWeb
                 raise StandardError, "Session #{session}, is not active."
             end
 
-            client = Savon::Client.new do
-                wsdl.document = auth_url
-                wsdl.element_form_default = :unqualified
-            end
+            client = prepare_request(auth_url)
 
-            begin
-                logout_response = client.request  :logout do |soap|
+            logout_response = do_request_and_handle_errors do
+                client.request  :logout do |soap|
                     soap.body = {:id => session.to_s}
                 end
-            rescue ArgumentError, "Wasabi needs a WSDL document"
-                raise StandardError, "Incorrect login url supplied."
-            rescue Errno::ECONNREFUSED => error
-                raise error.to_s
-            rescue Savon::SOAP::Fault => fault
-                raise StandardError, "Incorrect session for logout: #{fault.to_s}"
-            rescue Savon::Error => error
-                raise error.to_s
             end
 
             unless logout_response.soap_fault?
                 @session = nil
             end
-
         end
     end
 end
