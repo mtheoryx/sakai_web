@@ -21,12 +21,12 @@ describe "#new" do
             client.config_file.should eql( Dir.home + "/.sakai_web_config.yml" )
         end
         it "should accept a new config file location" do
-            client = SakaiWeb::Client.new( {:config_file => Dir.home + "Desktop/.sakai_web_config.yml"} )
-            client.config_file.should eql( Dir.home + "Desktop/.sakai_web_config.yml" )
+            client = SakaiWeb::Client.new( {:config_file => Dir.home + "/.sakai_web_config.yml"} )
+            client.config_file.should eql( Dir.home + "/.sakai_web_config.yml" )
         end
     end
 
-    describe "#login", :focus => true do
+    describe "#login" do
         before(:all) do
             @config = YAML.load_file(Dir.home + "/.sakai_web_config.yml");
             @client = SakaiWeb::Client.new

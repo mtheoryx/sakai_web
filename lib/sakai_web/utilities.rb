@@ -33,6 +33,8 @@ module SakaiWeb
                 raise StandardError, "Incorrect login url supplied."
             rescue Errno::ECONNREFUSED => error
                 raise "Server doesn't seem to be there: #{error.to_s}"
+            rescue Savon::SOAP::Fault => fault
+                raise fault.to_s
             end
         end
     end

@@ -11,7 +11,7 @@ describe SakaiWeb::ScriptApi do
 
     describe "#list_services" do
         it "should give a list of available services to use" do
-        @client.list_services.should_not be_nil
+            @client.list_services.should_not be_nil
         end
     end
 
@@ -101,29 +101,6 @@ describe SakaiWeb::ScriptApi do
         end
         it "should return true if the page already exists" do
             @client.find_page_in_site( @test_site_id, @test_page_title ).should be_true
-        end
-    end
-
-    describe "#remove_page_from_site" do
-        before(:all) do
-            @test_site_id = "03eff8a7-cbae-4daa-9387-c06c05cf5e13"
-            @test_page_title = "Media Gallery"
-            @test_dupe_page_title = "Home"
-        end
-        it "should require a site_id" do
-            expect{ @client.remove_page_from_site }.to raise_error ArgumentError
-        end
-        it "should require a page_title" do
-            expect{ @client.remove_page_from_site( @test_site_id ) }.to raise_error ArgumentError
-        end
-        it "should fail when the page doesn't exist" do
-            expect{ @client.remove_page_from_site( @test_site_id, "Not a real site." ) }.to raise_error
-        end
-        it "should remove a page that does exist" do
-            pending "Bug in this api method, was resolved in 2.9, so we can't use this yet. :("
-            # @client.add_page_to_site( @test_site_id, "Test Page" )
-            # expect{ @client.remove_page_from_site( @test_site_id, "Test Page" )}.to_not raise_error
-            # @client.find_page_in_site( @test_site_id, "Test Page" ).should be_false
         end
     end
 
