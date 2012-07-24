@@ -8,8 +8,4 @@ module SakaiWeb
   class AlreadyExists < StandardError
   end
 
-  module Exceptions
-    def run_and_handle_excpetions()
-    end
-  end
 end
