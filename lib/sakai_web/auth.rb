@@ -20,6 +20,12 @@ module SakaiWeb
         #
         # @param auth_url [String] The url to the SakaiLogin.jws WSDL
         # @param auth_opts [Hash] Options to override defaults.
+        #
+        # @option auth_opts [String] :admin Username for authentication
+        # @option auth_opts [String] :password Password for authentication
+        #
+        # @raise [ArgumentError] If there isn't a parameter passed in or config file containing auth values
+        #
         # @return [Boolean] returns true if a session was set, false if it was not.
         def login(auth_url = nil, auth_opts = {})
             @session, @cookie = nil
@@ -39,6 +45,11 @@ module SakaiWeb
         end
 
         # Method used to call the Sakai Web Services login WSDL and establish a new session
+        #
+        # @raise [StandardError] If you don't provide a correct login WSDL url
+        # @raise [ECONNREFUSED] If the server is not responding, or doesn't exist.
+        # @raise [StandarError] If the credentials don't allow a login
+        # @raise [Savon::Error] Catchall for other errors from Savon soap request.
         #
         # @return (see #login)
         def get_new_session
@@ -77,7 +88,16 @@ module SakaiWeb
         #
         # Session will probably stick around, but will be marked inactive immediately.
         #
+        # Sets the session attibute to nil if successful
+        #
         # @param session [String] Session identifier from which to log out.
+        #
+        # @raise [StandardError] Incorrect SakaiLogin WSDL url provided
+        # @raise [ECONNREFUSED] Server is not responding, or doesn't exist.
+        # @raise [StandardError] If you pass a session that isn't even valid in the first place.
+        # @raise [Savon::Error] Carchall for other errors from Savon soap request
+        #
+        # @return [nil]
         def logout( session )
             unless @session = session
                 raise StandardError, "Session #{session}, is not active."

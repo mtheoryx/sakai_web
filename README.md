@@ -21,19 +21,6 @@ Or install it yourself as:
 
 	require 'sakai_web'
 
-	# Interact with Sakai Web services in a REST-ish way
-
-	#Get
-	SakaiWeb.get(service, data, auth)
-
-	#Put
-	SakaiWeb.put(service, data, auth)
-
-	#Post
-	SakaiWeb.post(service, data, auth)
-
-	#Delete
-	SakaiWeb.delete(service, data, auth)
 
 ## Usage as a standalone CLI utility:
 

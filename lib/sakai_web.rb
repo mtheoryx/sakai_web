@@ -6,6 +6,7 @@ end
 # SakaiWeb sakai web services API wrapper
 #
 # @author David Poindexter <davpoind@iupui.edu>
+# @version (see SakaiWeb::Version)
 module SakaiWeb
   # SakaiWeb sakai web services API wrapper
   #
@@ -23,6 +24,12 @@ module SakaiWeb
     # Configuration options can be passed in, or read from a YAML configuration file.
     #
     # @param opts [Hash] opts The configuration options for interracting with the web services.
+    # @option opts [String] :user The username for authentication.
+    # @option opts [String] :pass The password for authentication.
+    # @option opts [String] :auth_url The URL for the SakaiLogin WSDL
+    # @option opts [String] :session A valid session identifier
+    # @option opts [String] :config_file File path to a configuration file
+    # @option opts [String] :service_wsdl URL for the SakaiScript WSDL, or other WSDL to user for actions.
     def initialize( opts = {} )
       @user = nil
       @pass = nil
