@@ -16,5 +16,6 @@ RSpec.configure do |config|
   config.formatter = 'documentation'
   config.filter_run :focus => true
   config.run_all_when_everything_filtered = true
+  config.fail_fast = true
   # config.extend VCR::RSpec::Macros
 end

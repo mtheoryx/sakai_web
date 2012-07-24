@@ -29,8 +29,7 @@ module SakaiWeb
         # @return [Boolean] returns true if a session was set, false if it was not.
         def login(auth_url = nil, auth_opts = {})
             @session, @cookie = nil
-
-            config = YAML.load( File.open(@config_file) );
+            config = YAML.load( File.open(@config_file) )
 
             @auth_url = auth_url ||= config[:auth_wsdl]
             raise(ArgumentError, "No login wsdl URL supplied.")if @auth_url.nil?
