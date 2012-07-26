@@ -3,6 +3,11 @@ require 'yaml'
 %w{version auth utilities script_api cli}.each do |local|
   require "sakai_web/#{local}"
 end
+
+%w{post}.each do |local|
+  require "sakai_web/cli/#{local}"
+end
+
 # SakaiWeb sakai web services API wrapper
 #
 # @author David Poindexter <davpoind@iupui.edu>
@@ -13,7 +18,7 @@ module SakaiWeb
   # @author (see SakaiWeb)
   class Client
 
-    [Auth, Utilities, ScriptApi, Cli].each do |inc|
+    [Auth, Utilities, ScriptApi].each do |inc|
       include inc
     end
 

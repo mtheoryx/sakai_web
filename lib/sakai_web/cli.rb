@@ -1,8 +1,8 @@
+require "sakai_web/cli/post"
 module SakaiWeb
-    # Command Line configuration for using SakaiWeb directly.
-    #
-    # @author (see SakaiWeb)
-    module Cli
+    module CLI
+        # include Post
+
 
     end
 end

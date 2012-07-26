@@ -26,4 +26,5 @@ Gem::Specification.new do |gem|
 
 
   gem.add_runtime_dependency "savon", "~> 1.1.0"
+  gem.add_runtime_dependency "gli"
 end

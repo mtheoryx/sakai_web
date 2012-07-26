@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'yaml'
 
-describe SakaiWeb::Cli do
+describe SakaiWeb::CLI, :focus => true do
+
 end
