@@ -4,15 +4,16 @@ require 'yaml'
   require "sakai_web/#{local}"
 end
 
-%w{post}.each do |local|
-  require "sakai_web/cli/#{local}"
-end
+# %w{post get put delete}.each do |local|
+#   require "sakai_web/cli/#{local}"
+# end
 
 # SakaiWeb sakai web services API wrapper
 #
 # @author David Poindexter <davpoind@iupui.edu>
 # @version (see SakaiWeb::Version)
 module SakaiWeb
+
   # SakaiWeb sakai web services API wrapper
   #
   # @author (see SakaiWeb)

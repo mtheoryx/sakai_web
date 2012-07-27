@@ -1,7 +1,7 @@
 module SakaiWeb
     module CLI
         module Post
-            # protected
+            protected
             def testing
                 puts "hello from Post module!"
             end

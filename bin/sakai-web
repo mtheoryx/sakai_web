@@ -1,83 +1,78 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+require 'sakai_web'
+require 'sakai_web/cli'
 
+SakaiWeb::CLI.start(ARGV)
+# require 'gli'
 # require 'sakai_web'
 # require 'sakai_web/cli'
 # require 'sakai_web/cli/post'
+# require 'sakai_web/version'
+# require 'pry'
+# include GLI
 
-# SakaiWeb::CLI.start(ARGV)
-require 'gli'
-require 'sakai_web'
-require 'sakai_web/cli'
-require 'sakai_web/cli/post'
-require 'sakai_web/version'
-require 'pry'
-include GLI
+# program_desc 'CLI for interracting somewhat RESTfully with Sakai Web Services.'
 
-program_desc 'CLI for interracting somewhat RESTfully with Sakai Web Services.'
+# version SakaiWeb::VERSION
 
-version SakaiWeb::VERSION
+# # Global Options Declared here
+# #
+# desc 'User- and implementation-specific variables.'
+# default_value '~/.sakai_web_config.yml'
+# arg_name 'config'
+# flag [:f, :config_file]
 
-# Global Options Declared here
-#
-desc 'User- and implementation-specific variables.'
-default_value '~/.sakai_web_config.yml'
-arg_name 'config'
-flag [:f, :config_file]
+# # Post Method
+# #
+# desc 'Similar to HTTP POST, this is used to add new objects to things.'
+# arg_name 'Objects to be added to targets.'
+# command :post do |c|
+#     c.desc 'Name of objects to add'
+#     c.default_value 'properties'
+#     c.flag :o, :object
 
-# Post Method
-#
-desc 'Similar to HTTP POST, this is used to add new objects to things.'
-arg_name 'Objects to be added to targets.'
-command :post do |c|
-    c.desc 'Name of objects to add'
-    c.default_value 'properties'
-    c.flag :o, :object
+#     c.desc 'List of objects'
+#     c.default_value nil
+#     c.flag :object_file
 
-    c.desc 'List of objects'
-    c.default_value nil
-    c.flag :object_file
+#     c.desc 'Type of targets'
+#     c.default_value 'sites'
+#     c.flag :t, :target
 
-    c.desc 'Type of targets'
-    c.default_value 'sites'
-    c.flag :t, :target
+#     c.desc 'List of targets'
+#     c.default_value nil
+#     c.flag :target_file
 
-    c.desc 'List of targets'
-    c.default_value nil
-    c.flag :target_file
+#     c.action do |global_options,options,args|
+#         # Error Handling for input
+#         abort("Object file must be specified.") if options[:object_file].nil?
+#         abort("Target file must be specified.") if options[:target_file].nil?
+#         abort("Object file does not exist at path #{options[:object_file]}") unless FileTest.exists? options[:object_file]
+#         abort("Target file does not exist at path #{options[:target_file]}") unless FileTest.exists? options[:target_file]
+#     end
+# end
 
-    c.action do |global_options,options,args|
-        p options
-        p args
+# pre do |global,command,options,args|
+#   # Pre logic here
+#   # Return true to proceed; false to abort and not call the
+#   # chosen command
+#   # Use skips_pre before a command to skip this block
+#   # on that command only
+#   true
+# end
 
-        # Error Handling for input
-        abort("Object file must be specified.") if options[:object_file].nil?
-        abort("Target file must be specified.") if options[:target_file].nil?
-        abort("Object file does not exist at path #{options[:object_file]}") unless FileTest.exists? options[:object_file]
-        abort("Target file does not exist at path #{options[:target_file]}") unless FileTest.exists? options[:target_file]
+# post do |global,command,options,args|
+#   # Post logic here
+#   # Use skips_post before a command to skip this
+#   # block on that command only
+# end
 
-    end
-end
+# on_error do |exception|
+#   # Error logic here
+#   # return false to skip default error handling
+#   # true
+#   false
+# end
 
-pre do |global,command,options,args|
-  # Pre logic here
-  # Return true to proceed; false to abort and not call the
-  # chosen command
-  # Use skips_pre before a command to skip this block
-  # on that command only
-  true
-end
-
-post do |global,command,options,args|
-  # Post logic here
-  # Use skips_post before a command to skip this
-  # block on that command only
-end
-
-on_error do |exception|
-  # Error logic here
-  # return false to skip default error handling
-  true
-end
-
-exit GLI.run(ARGV)
+# exit GLI.run(ARGV)
