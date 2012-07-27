@@ -11,10 +11,11 @@ module SakaiWeb
         #
         # @return [Savon::Client] Returns a new Savon::Client
         def prepare_request(action_wsdl)
-            client = Savon::Client.new do
+            client = Savon::Client.new do |wsdl|
                 wsdl.document = action_wsdl
                 wsdl.element_form_default = :unqualified
             end
+
             return client
         end
 

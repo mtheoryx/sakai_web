@@ -82,6 +82,7 @@ module SakaiWeb
         #
         # @return [Boolean] Returns true if the property was added, false if it was not added.
         def add_property_to_site( site_id, property )
+
             return false unless get_site_property(site_id, property[:propname])
             client = prepare_request( @service_wsdl )
 

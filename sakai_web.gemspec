@@ -26,5 +26,7 @@ Gem::Specification.new do |gem|
 
 
   gem.add_runtime_dependency "savon", "~> 1.1.0"
-  gem.add_runtime_dependency "gli"
+  gem.add_runtime_dependency "soap4r"
+  # gem.add_runtime_dependency "gli"
+  gem.add_dependency "trollop"
 end

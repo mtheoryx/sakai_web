@@ -44,7 +44,7 @@ describe SakaiWeb::ScriptApi do
         end
     end
 
-    describe "#add_property_to_site" do
+    describe "#add_property_to_site", :focus => true do
         it "should require a site id" do
             expect{ @client.add_property_to_site }.to raise_error ArgumentError
         end

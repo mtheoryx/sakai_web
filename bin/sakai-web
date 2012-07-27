@@ -2,6 +2,7 @@
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require 'sakai_web'
 require 'sakai_web/cli'
+# require 'pry'
 
 SakaiWeb::CLI.start(ARGV)
 # require 'gli'
