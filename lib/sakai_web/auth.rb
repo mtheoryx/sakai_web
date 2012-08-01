@@ -56,6 +56,7 @@ module SakaiWeb
             end
 
             @session = login_response.to_hash[:login_response][:login_return]
+            @cookie = login_response.http.headers["Set-Cookie"]
 
             false unless @session.instance_of? Nori::StringWithAttributes
         end
@@ -75,6 +76,7 @@ module SakaiWeb
         #
         # @return [nil]
         def logout( session )
+
             unless @session = session
                 raise StandardError, "Session #{session}, is not active."
             end

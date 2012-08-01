@@ -78,7 +78,7 @@ EOS
 
             # login
             client.login
-
+            # binding.pry
             # loop through properties and sites
             property_file = YAML.load_file( opts[:object] )
             site_file = YAML.load_file( opts[:target] )
@@ -91,10 +91,18 @@ EOS
 
                 puts "Adding property #{prop_name}, #{prop_value} to #{site_file["sites"].length} sites..."
                 site_file["sites"].each do |s|
+
                     puts "#{s["site"]}..."
                     # do a request for every site in our site list
-                    client.add_property_to_site( s["site"], {:propname => prop_name, :propvalue => prop_value} )
-
+                    i = 0
+                    begin
+                        worker = client.add_property_to_site( s["site"], {:propname => prop_name, :propvalue => prop_value} )
+                        puts "Did it work?"
+                        i += 1
+                        sleep(2)
+                    end until (client.get_site_property( s["site"], prop_name )) or (i < 3)
+                    sleep(1)
+                    puts client.get_site_property( s["site"], prop_name )
                     puts "Finished adding property #{prop_name}, #{prop_value} to site #{s["site"]}..."
                 end
                 puts "Done adding property #{prop_name}, #{prop_value} to #{site_file["sites"].length} sites."
@@ -107,7 +115,74 @@ EOS
         end
 
         def self.add_tool_to_site( client, opts )
-            abort("add_tool_to_site CLI not implemented yet!")
+            config = YAML.load_file( client.config_file )
+
+            client.login
+
+            tool_file = YAML.load_file( opts[:object] )
+            site_file = YAML.load_file( opts[:target] )
+
+            puts "Adding tools..."
+
+            # for each tool
+            tool_file["tools"].each do |tool|
+                tool_id = tool["tool"]["id"]
+                tool_title = tool["tool"]["title"]
+                page_title = tool["tool"]["title"]
+
+                puts "Adding tool #{tool_title}, #{tool_id} to #{site_file["sites"].length} sites..."
+
+                # add to each site
+                site_file["sites"].each do |s|
+                    puts "#{s["site"]}..."
+
+                    # do a request for every site in our site list
+                    i = 0
+                    begin
+                        worker = client.add_tool_to_site( s["site"], page_title, tool_title, tool_id )
+                        puts "Did it work?"
+                        i += 1
+                        sleep(1)
+                    end until (client.find_tool_in_site( s["site"], tool_id )) or (i < 3)
+                    sleep(1)
+                    puts client.find_tool_in_site( s["site"], tool_id )
+                    puts "Done adding tool #{tool_title}, #{tool_id} to site #{s["site"]}..."
+                end
+                puts "Done adding tool #{tool_title}, #{tool_id} to #{site_file["sites"].length} sites..."
+
+
+
+            end
+            puts "Done adding tools."
+
+            #logout
+            client.logout( client.session )
+
         end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     end
 end

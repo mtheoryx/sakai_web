@@ -35,11 +35,25 @@ module SakaiWeb
         def list_tools_for_site( site_id )
             client = prepare_request( @service_wsdl )
 
-            response = do_request_and_handle_errors do
-                client.request  :get_pages_and_tools_for_site do |soap|
+            # response = do_request_and_handle_errors do
+            #     client.request  :get_pages_and_tools_for_site do |soap|
+            #         soap.body = {:sessionid => @session, :siteid => site_id}
+            #     end
+            # end
+            begin
+                response = client.request  :get_pages_and_tools_for_site do |soap|
                     soap.body = {:sessionid => @session, :siteid => site_id}
                 end
+                # binding.pry
+            rescue ArgumentError, "Wasabi needs a WSDL document"
+                raise StandardError, "Incorrect login url supplied."
+            rescue Errno::ECONNREFUSED => error
+                raise "Server doesn't seem to be there: #{error.to_s}"
+            rescue Savon::SOAP::Fault => fault
+                raise fault.to_s
+            rescue
             end
+
 
             tool_list = Nokogiri::XML.parse(
                             response.to_hash[:get_pages_and_tools_for_site_response][:get_pages_and_tools_for_site_return])
@@ -82,20 +96,25 @@ module SakaiWeb
         #
         # @return [Boolean] Returns true if the property was added, false if it was not added.
         def add_property_to_site( site_id, property )
-
-            return false unless get_site_property(site_id, property[:propname])
+            # return false if get_site_property(site_id, property[:propname])
             client = prepare_request( @service_wsdl )
 
-            response = do_request_and_handle_errors do
-                client.request  :set_site_property do |soap|
+            begin
+                response = client.request  :set_site_property do |soap|
                     soap.body = {:sessionid => @session,
                                         :siteid => site_id,
                                         :propname => property[:propname],
                                         :propvalue => property[:propvalue]}
                 end
+            rescue ArgumentError, "Wasabi needs a WSDL document"
+                raise StandardError, "Incorrect login url supplied."
+            rescue Errno::ECONNREFUSED => error
+                raise "Server doesn't seem to be there: #{error.to_s}"
+            rescue Savon::SOAP::Fault => fault
+                raise fault.to_s
             end
 
-            (response.to_hash[:set_site_property_response][:set_site_property_return] == "success") ? false : true
+            (response.to_hash[:set_site_property_response][:set_site_property_return] == "success") ? true : false
         end
 
         # Searches a site for a tool
@@ -122,10 +141,13 @@ module SakaiWeb
         def find_page_in_site( site_id, page_title )
             client = prepare_request( @service_wsdl )
 
-            response = do_request_and_handle_errors do
-                client.request  :get_pages_and_tools_for_site do |soap|
+            # response = do_request_and_handle_errors do
+            #     client.request  :get_pages_and_tools_for_site do |soap|
+            #         soap.body = {:sessionid => @session, :siteid => site_id}
+            #     end
+            # end
+            response = client.request  :get_pages_and_tools_for_site do |soap|
                     soap.body = {:sessionid => @session, :siteid => site_id}
-                end
             end
 
             page_list = Nokogiri::XML.parse(
@@ -152,17 +174,34 @@ module SakaiWeb
         #
         # @return [Boolean] True if operation successful, false if it was not.
         def add_page_to_site( site_id, page_title, layout = 0)
+
             return true if find_page_in_site( site_id, page_title )
 
             client = prepare_request( @service_wsdl )
 
-            response = do_request_and_handle_errors do
-                client.request  :add_new_page_to_site do |soap|
+            # response = do_request_and_handle_errors do
+            #     binding.pry
+            #     client.request  :add_new_page_to_site do |soap|
+            #         soap.body = { :sessionid => @session,
+            #                                 :siteid => site_id,
+            #                                 :pagetitle => page_title,
+            #                                 :layouthints => layout}
+            #     end
+            # end
+
+            begin
+                response = client.request  :add_new_page_to_site do |soap|
                     soap.body = { :sessionid => @session,
                                             :siteid => site_id,
                                             :pagetitle => page_title,
                                             :layouthints => layout}
                 end
+            rescue ArgumentError, "Wasabi needs a WSDL document"
+                raise StandardError, "Incorrect login url supplied."
+            rescue Errno::ECONNREFUSED => error
+                raise "Server doesn't seem to be there: #{error.to_s}"
+            rescue Savon::SOAP::Fault => fault
+                raise fault.to_s
             end
 
             ( response.to_hash[:add_new_page_to_site_response][:add_new_page_to_site_return] == "success" ) ? true : (return false)
@@ -178,7 +217,6 @@ module SakaiWeb
         # @param tool_id [String]
         # @param layout_hints [String]
         #
-        #
         # @return [Boolean]
         def add_tool_to_site( site_id, page_title, tool_title, tool_id, layout_hints = "0,0")
             return true if find_tool_in_site( site_id, tool_id )
@@ -187,8 +225,19 @@ module SakaiWeb
 
             client = prepare_request( @service_wsdl )
 
-            response = do_request_and_handle_errors do
-                client.request  :add_new_tool_to_page do |soap|
+            # response = do_request_and_handle_errors do
+            #     binding.pry
+            #     client.request  :add_new_tool_to_page do |soap|
+            #         soap.body = { :sessionid => @session,
+            #                                 :siteid => site_id,
+            #                                 :pagetitle => page_title,
+            #                                 :tooltitle => tool_title,
+            #                                 :toolid => tool_id,
+            #                                 :layouthints => layout_hints}
+            #     end
+            # end
+            begin
+                response = client.request  :add_new_tool_to_page do |soap|
                     soap.body = { :sessionid => @session,
                                             :siteid => site_id,
                                             :pagetitle => page_title,
@@ -196,7 +245,15 @@ module SakaiWeb
                                             :toolid => tool_id,
                                             :layouthints => layout_hints}
                 end
+            rescue ArgumentError, "Wasabi needs a WSDL document"
+                raise StandardError, "Incorrect login url supplied."
+            rescue Errno::ECONNREFUSED => error
+                raise "Server doesn't seem to be there: #{error.to_s}"
+            rescue Savon::SOAP::Fault => fault
+                raise fault.to_s
             end
+
+
 
             ( response.to_hash[:add_new_tool_to_page_response][:add_new_tool_to_page_return] == "success" ) ? true : (return false)
         end

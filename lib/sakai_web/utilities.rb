@@ -11,9 +11,10 @@ module SakaiWeb
         #
         # @return [Savon::Client] Returns a new Savon::Client
         def prepare_request(action_wsdl)
-            client = Savon::Client.new do |wsdl|
+            client = Savon::Client.new do |wsdl, http|
                 wsdl.document = action_wsdl
                 wsdl.element_form_default = :unqualified
+                http.headers["Cookie"] = @cookie
             end
 
             return client
