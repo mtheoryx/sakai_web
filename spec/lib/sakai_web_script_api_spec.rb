@@ -54,7 +54,7 @@ describe SakaiWeb::ScriptApi do
         it "should not set an identical property if it exists" do
             @client.add_property_to_site( @test_correct_site,
                                                         {:propname => "contact-name",
-                                                        :propvalue => "David Poindexter"} ).should be_false
+                                                        :propvalue => "David Poindexter"} ).should be_true
         end
         it "should set the requested property on the site" do
             expect {@client.add_property_to_site( @test_correct_site,

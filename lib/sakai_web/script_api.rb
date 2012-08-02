@@ -35,16 +35,10 @@ module SakaiWeb
         def list_tools_for_site( site_id )
             client = prepare_request( @service_wsdl )
 
-            # response = do_request_and_handle_errors do
-            #     client.request  :get_pages_and_tools_for_site do |soap|
-            #         soap.body = {:sessionid => @session, :siteid => site_id}
-            #     end
-            # end
             begin
                 response = client.request  :get_pages_and_tools_for_site do |soap|
                     soap.body = {:sessionid => @session, :siteid => site_id}
                 end
-                # binding.pry
             rescue ArgumentError, "Wasabi needs a WSDL document"
                 raise StandardError, "Incorrect login url supplied."
             rescue Errno::ECONNREFUSED => error
@@ -96,7 +90,7 @@ module SakaiWeb
         #
         # @return [Boolean] Returns true if the property was added, false if it was not added.
         def add_property_to_site( site_id, property )
-            # return false if get_site_property(site_id, property[:propname])
+            return true if get_site_property(site_id, property[:propname])
             client = prepare_request( @service_wsdl )
 
             begin
@@ -174,20 +168,9 @@ module SakaiWeb
         #
         # @return [Boolean] True if operation successful, false if it was not.
         def add_page_to_site( site_id, page_title, layout = 0)
-
             return true if find_page_in_site( site_id, page_title )
 
             client = prepare_request( @service_wsdl )
-
-            # response = do_request_and_handle_errors do
-            #     binding.pry
-            #     client.request  :add_new_page_to_site do |soap|
-            #         soap.body = { :sessionid => @session,
-            #                                 :siteid => site_id,
-            #                                 :pagetitle => page_title,
-            #                                 :layouthints => layout}
-            #     end
-            # end
 
             begin
                 response = client.request  :add_new_page_to_site do |soap|
@@ -225,17 +208,6 @@ module SakaiWeb
 
             client = prepare_request( @service_wsdl )
 
-            # response = do_request_and_handle_errors do
-            #     binding.pry
-            #     client.request  :add_new_tool_to_page do |soap|
-            #         soap.body = { :sessionid => @session,
-            #                                 :siteid => site_id,
-            #                                 :pagetitle => page_title,
-            #                                 :tooltitle => tool_title,
-            #                                 :toolid => tool_id,
-            #                                 :layouthints => layout_hints}
-            #     end
-            # end
             begin
                 response = client.request  :add_new_tool_to_page do |soap|
                     soap.body = { :sessionid => @session,

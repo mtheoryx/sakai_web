@@ -19,12 +19,12 @@ Or install it yourself as:
 
 ## Usage in your own code:
 
-	require 'sakai_web'
+    require 'sakai_web'
 
 
 ## Usage as a standalone CLI utility:
 
-	Feature (binary) Coming soon...
+    sakai_web --help
 
 ## Contributing
 

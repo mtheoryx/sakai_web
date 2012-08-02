@@ -1,11 +1,6 @@
 require 'sakai_web'
 require 'yaml'
 require 'trollop'
-require 'pry'
-
-%w{post get put delete}.each do |local|
-    require "sakai_web/cli/#{local}"
-end
 
 module SakaiWeb
     module CLI
@@ -31,11 +26,12 @@ EOS
                 opt :object, "[REQUIRED] Path to a YAML file with list of objects", :type => String
                 opt :target, "[REQUIRED] Path to a YAML file with list of targets.", :type => String
             end
+
             opts = Trollop::with_standard_exception_handling p do
                 raise Trollop::HelpNeeded if ARGV.empty? # show help screen
                 p.parse args
             end
-            # binding.pry
+
             # Handle required values
             raise ArgumentError.new("Must supply action argument." ) if opts[:action].nil?
             raise ArgumentError.new("Must supply object file." ) if opts[:object].nil?
@@ -78,12 +74,13 @@ EOS
 
             # login
             client.login
-            # binding.pry
+
             # loop through properties and sites
             property_file = YAML.load_file( opts[:object] )
             site_file = YAML.load_file( opts[:target] )
 
             puts "Adding properties..."
+
             # For each property
             property_file["properties"].each do |prop|
                 prop_name = prop["property"]["name"]
@@ -99,16 +96,15 @@ EOS
                         worker = client.add_property_to_site( s["site"], {:propname => prop_name, :propvalue => prop_value} )
                         puts "Did it work?"
                         i += 1
-                        sleep(2)
+                        sleep(1)
                     end until (client.get_site_property( s["site"], prop_name )) or (i < 3)
-                    sleep(1)
+
                     puts client.get_site_property( s["site"], prop_name )
                     puts "Finished adding property #{prop_name}, #{prop_value} to site #{s["site"]}..."
                 end
                 puts "Done adding property #{prop_name}, #{prop_value} to #{site_file["sites"].length} sites."
             end
             puts "Done adding properties."
-
 
             # logout
             client.logout( client.session )
@@ -144,45 +140,16 @@ EOS
                         i += 1
                         sleep(1)
                     end until (client.find_tool_in_site( s["site"], tool_id )) or (i < 3)
-                    sleep(1)
                     puts client.find_tool_in_site( s["site"], tool_id )
                     puts "Done adding tool #{tool_title}, #{tool_id} to site #{s["site"]}..."
                 end
                 puts "Done adding tool #{tool_title}, #{tool_id} to #{site_file["sites"].length} sites..."
-
-
 
             end
             puts "Done adding tools."
 
             #logout
             client.logout( client.session )
-
         end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     end
 end

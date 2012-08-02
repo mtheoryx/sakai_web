@@ -26,7 +26,7 @@ describe "#new" do
         end
     end
 
-    describe "#login", :focus => true do
+    describe "#login" do
         before(:all) do
             @config = YAML.load_file(Dir.home + "/.sakai_web_config.yml")
             @client = SakaiWeb::Client.new
