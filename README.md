@@ -24,7 +24,7 @@ Or install it yourself as:
 
 ## Usage as a standalone CLI utility:
 
-    sakai_web --help
+    sakai-web --help
 
 ## Contributing
 
